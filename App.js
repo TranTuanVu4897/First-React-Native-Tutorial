@@ -1,19 +1,48 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react'; //this use hook
+import {
+    StyleSheet,
+    Text,
+    View,
+    FlatList,
+    TouchableOpacity,
+} from 'react-native';
 
 export default function App() {
+    const [people, setPeople] = useState([
+        { name: 'John', id: '1' },
+        { name: 'Mike', id: '2' },
+        { name: 'Tome', id: '3' },
+        { name: 'Mart', id: '4' },
+        { name: 'Anna', id: '5' },
+        { name: 'Bobs', id: '6' },
+        { name: 'Lizt', id: '7' },
+        { name: 'Nine', id: '8' },
+        { name: 'Trav', id: '9' },
+        { name: 'Cerv', id: '10' },
+        { name: 'Dodg', id: '11' },
+        { name: 'Illi', id: '12' },
+    ]);
+
+    const pressHandler = id => {
+        // console.log(id);
+        setPeople(prevPeople => {
+            return prevPeople.filter(person => person.id != id);
+        });
+    };
+
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.boldText}>Hello</Text>
-            </View>
-            <View style={styles.body}>
-                <Text style={styles.boldText}>
-                    lorem <Text>ipsum</Text> dolor sit amet.
-                </Text>
-                <Text>lorem ipsum dolor sit amet.</Text>
-                <Text>lorem ipsum dolor sit amet.</Text>
-            </View>
+            {/* less code than scroll view, performance better? */}
+            <FlatList
+                numColumns={2}
+                keyExtractor={item => item.id}
+                data={people}
+                renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => pressHandler(item.id)}>
+                        <Text style={styles.item}>{item.name}</Text>
+                    </TouchableOpacity>
+                )}
+            />
         </View>
     );
 }
@@ -22,19 +51,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
+        paddingTop: 40,
+        paddingHorizontal: 20,
+        // alignItems: 'center',
+        // justifyContent: 'center',
     },
-    header: {
-        backgroundColor: 'pink',
-        padding: 20,
-    },
-    boldText: {
-        fontWeight: 'bold',
-    },
-    body: {
-        backgroundColor: 'yellow',
-        padding: 20,
-        fontWeight: 'bold',
+    item: {
+        margin: 24,
+        padding: 30,
+        backgroundColor: 'aqua',
+        fontSize: 24,
     },
 });
